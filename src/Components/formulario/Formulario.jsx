@@ -7,15 +7,19 @@ import Box from '@material-ui/core/Box'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 
 
-function Formulario() {
+function Formulario({aoEnviar, validarCpf}) {
     const [Nome, setNome] = useState();
     const [SobreNome, setSobreNome] = useState(" ")
+    const [Cpf, setCpf] = useState("")
+    const [Promocoes, setPromocoes] = useState(true)
+    const [Novidades, setNovidades] = useState(true)
+    const [erros, setErros] = useState({cpf:{valido: true, texto: ""}})
+
 
     const onSubmit = (event) => {
         event.preventDefault();
 
-        console.log(Nome);
-        console.log(SobreNome)
+        aoEnviar({Nome,SobreNome, Cpf, Promocoes, Novidades})
     }
 
     return (
@@ -26,12 +30,30 @@ function Formulario() {
                     onChange={(event) => { setNome(event.target.value) }} />
 
                 <TextField id="SobreNome" label="Sobre Nome" variant="outlined" fullWidth margin='normal'
-                onChange={(event) => { setSobreNome(event.target.value) }} />
-                <TextField id="cpf" label="CPF" variant="outlined" fullWidth margin='normal' />
+                    onChange={(event) => { setSobreNome(event.target.value) }}  />
 
-                <FormControlLabel label="Promoções" control={<Switch name="Promocoes" defaultChecked color='primary' />} />
+                <TextField id="cpf" value={Cpf} label="CPF" variant="outlined" fullWidth margin='normal'
+                    onChange={(event) => { setCpf(event.target.value) }}
+                    onBlur={(event)=>{
+                        setErros(validarCpf(Cpf))
 
-                <FormControlLabel label="Novidades" control={<Switch name="Novidades" defaultChecked color='primary' />} />
+                        console.log(erros)
+                    }}
+                    error={!erros.cpf.valido} helperText={erros.cpf.texto}
+                 />
+
+                <FormControlLabel label="Promoções" checked={Promocoes} control={<Switch name="Promocoes" color='primary' onChange={(event) => {
+                    setPromocoes(event.target.checked)
+                }} />} />
+
+                <FormControlLabel
+                    label="Novidades"
+                    checked={Novidades}
+                    control={<Switch name="Novidades"
+                        color='primary'
+                        onChange={(event) => {
+                            setNovidades(event.target.checked)
+                        }} />} />
 
                 <Box display="flex" justifyContent="center" mt={2}>
                     <Button variant='contained' type="submit" color='primary' > Cadastrar</Button>

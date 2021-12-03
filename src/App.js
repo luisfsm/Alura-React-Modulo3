@@ -10,12 +10,26 @@ function App() {
       <Container component={"article"} maxWidth="xs">
 
         <Typography variant="h3" align='center' component="h1" color="initial">Formulario Cadastro</Typography>
-        <Formulario />
+        <Formulario aoEnviar={aoEnviarForm}validarCpf={validarCpf} />
 
       </Container>
 
     </>
   );
+}
+
+function aoEnviarForm(dados){
+  console.log(dados);
+}
+
+function validarCpf(cpf){
+
+  let resultado = cpf.length!==11? {cpf:{valido: false, texto: "Digite um cpf de 11 caractere"}} : {cpf:{valido: true, texto: ""}} 
+
+  console.log(resultado)
+  return resultado;
+
+
 }
 
 export default App;
